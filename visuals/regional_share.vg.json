@@ -1,0 +1,78 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "background": "#fdf7f0",
+  "width": 450,
+  "height": 400,
+  "title": {
+    "text": "Regional Share of Australia's Trade (2024)",
+    "subtitle": "Each slice represents a region's share of total trade value | Source: DFAT (2024)",
+    "fontSize": 16,
+    "fontWeight": "bold",
+    "anchor": "middle",
+    "color": "#3b2400",
+    "subtitleFontSize": 12,
+    "subtitleColor": "#4b3a1f"
+  },
+  "data": {"url": "Data/regional_share.csv"},
+  "mark": {"type": "arc", "innerRadius": 90, "outerRadius": 180},
+  "encoding": {
+    "theta": {"field": "SharePercent", "type": "quantitative"},
+    "color": {
+      "field": "Region",
+      "type": "nominal",
+      "scale": {
+        "domain": [
+          "Asia-Pacific",
+          "North America",
+          "Europe",
+          "Middle East",
+          "Africa",
+          "South America"
+        ],
+        "range": ["#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00"]
+      },
+      "legend": {"title": "Region"}
+    },
+    "tooltip": [
+      {"field": "Region", "title": "Region"},
+      {"field": "SharePercent", "title": "Share (%)", "format": ".1f"}
+    ]
+  },
+  "layer": [
+    {
+      "mark": {"type": "arc", "stroke": "#fff", "strokeWidth": 1}
+    },
+    {
+      "mark": {
+        "type": "text",
+        "radius": 135,
+        "fontSize": 12,
+        "fontWeight": "bold",
+        "fill": "#333"
+      },
+      "encoding": {
+        "theta": {"field": "SharePercent", "type": "quantitative"},
+        "text": {"field": "SharePercent", "format": ".1f"}
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "radius": 160,
+        "dy": 10,
+        "fontSize": 11,
+        "fontWeight": "600",
+        "fill": "#333"
+      },
+      "encoding": {
+        "theta": {"field": "SharePercent", "type": "quantitative"},
+        "text": {"field": "Region"}
+      }
+    }
+  ],
+  "view": {"stroke": null},
+  "config": {
+    "legend": {"labelFontSize": 12, "titleFontSize": 13},
+    "title": {"font": "Inter"}
+  }
+}

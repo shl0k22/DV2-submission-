@@ -1,0 +1,16 @@
+Country,Port,State,Latitude,Longitude,Import_Value_A$b,Export_Value_A$b
+China,Sydney,NSW,-33.8688,151.2093,50,8
+China,Melbourne,VIC,-37.8136,144.9631,40,7
+Japan,Sydney,NSW,-33.8688,151.2093,25,6
+Japan,Melbourne,VIC,-37.8136,144.9631,20,5
+South Korea,Brisbane,QLD,-27.4698,153.0251,15,4
+South Korea,Melbourne,VIC,-37.8136,144.9631,10,3
+United States of America,Sydney,NSW,-33.8688,151.2093,30,5
+United States of America,Melbourne,VIC,-37.8136,144.9631,25,4
+India,Sydney,NSW,-33.8688,151.2093,10,2
+India,Melbourne,VIC,-37.8136,144.9631,8,2
+Taiwan,Brisbane,QLD,-27.4698,153.0251,7,1.5
+Singapore,Fremantle,WA,-32.056,115.744,12,3
+United Kingdom,Melbourne,VIC,-37.8136,144.9631,6,2
+New Zealand,Melbourne,VIC,-37.8136,144.9631,5,2
+Thailand,Brisbane,QLD,-27.4698,153.0251,8,1.8

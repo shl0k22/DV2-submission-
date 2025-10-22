@@ -1,0 +1,140 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 580,
+  "height": 400,
+  "title": {
+    "text": "Trade Trends for All Key Partners (2014–2024)",
+    "subtitle": "Source: ABS & DFAT (2014–2024)",
+    "font": "Playfair Display",
+    "fontSize": 16,
+    "fontWeight": 600,
+    "anchor": "middle",
+    "subtitleFontSize": 12,
+    "subtitleColor": "#4b3a1f"
+  },
+  "data": { "url": "Data/exports2024.csv" },
+  "params": [
+    { "name": "yearFilter" },
+    { "name": "tradeType" }
+  ],
+  "transform": [
+    { "filter": "datum.Year <= yearFilter" },
+    {
+      "calculate": "tradeType == 'Exports' ? datum.Exports_A$b : datum.Imports_A$b",
+      "as": "TradeValue"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "line",
+        "point": { "filled": true },
+        "strokeWidth": 2.5
+      },
+      "encoding": {
+        "x": {
+          "field": "Year",
+          "type": "quantitative",
+          "title": "Year",
+          "axis": { 
+            "grid": false, 
+            "tickCount": 11, 
+            "format": "d", 
+            "labelColor": "#3b2400", 
+            "titleColor": "#3b2400",
+            "labelFontSize": 11,
+            "titleFontSize": 12
+          }
+        },
+        "y": {
+          "field": "TradeValue",
+          "type": "quantitative",
+          "title": "Trade Value (A$ Billion)",
+          "scale": { "domain": [0, 220] },
+          "axis": { 
+            "grid": true, 
+            "labelColor": "#3b2400", 
+            "titleColor": "#3b2400",
+            "labelFontSize": 11,
+            "titleFontSize": 12
+          }
+        },
+        "color": {
+          "field": "Country",
+          "type": "nominal",
+          "title": "Country",
+          "legend": {
+            "orient": "bottom",
+            "direction": "horizontal",
+            "titleColor": "#3b2400",
+            "labelColor": "#3b2400",
+            "symbolSize": 60,
+            "titleFontSize": 11,
+            "labelFontSize": 10,
+            "columns": 5,
+            "symbolLimit": 20,
+            "offset": 5
+          },
+          "scale": {
+            "domain": [
+              "China", "Japan", "South Korea", "United States of America",
+              "India", "Taiwan", "Singapore", "United Kingdom",
+              "New Zealand", "Thailand"
+            ],
+            "range": [
+              "#d84315", "#1565c0", "#2e7d32", "#f9a825",
+              "#8e24aa", "#00897b", "#ef6c00", "#5d4037",
+              "#00796b", "#c62828"
+            ]
+          }
+        },
+        "tooltip": [
+          { "field": "Country", "type": "nominal", "title": "Country" },
+          { "field": "Year", "type": "quantitative", "title": "Year", "format": "d" },
+          { "field": "TradeValue", "type": "quantitative", "title": "Trade Value (A$B)", "format": ".1f" }
+        ]
+      }
+    },
+    {
+      "data": {"values": [{}]},
+      "mark": {
+        "type": "rule",
+        "strokeDash": [5, 5],
+        "strokeWidth": 2,
+        "color": "#c62828",
+        "opacity": 0.7
+      },
+      "encoding": {
+        "x": {"datum": 2020}
+      }
+    },
+    {
+      "data": {"values": [{}]},
+      "mark": {
+        "type": "text",
+        "align": "center",
+        "baseline": "bottom",
+        "dx": 0,
+        "dy": -5,
+        "fontSize": 11,
+        "fontWeight": "bold",
+        "color": "#c62828"
+      },
+      "encoding": {
+        "x": {"datum": 2020},
+        "y": {"datum": 210},
+        "text": {"value": "COVID-19 ↓"}
+      }
+    }
+  ],
+  "config": {
+    "background": "#fffaf3",
+    "view": { 
+      "stroke": null,
+      "continuousWidth": 580,
+      "continuousHeight": 400
+    },
+    "axis": { "labelFont": "Inter", "titleFont": "Inter" },
+    "padding": 5
+  }
+}

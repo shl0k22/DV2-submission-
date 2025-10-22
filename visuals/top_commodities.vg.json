@@ -1,0 +1,122 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "background": "#fffaf3",
+  "width": 480,
+  "height": 400,
+  
+  "autosize": {"type": "fit", "contains": "padding"},
+  "padding": {"left": 110, "right": 40, "top": 10, "bottom": 30},
+
+  "title": {
+    "text": {"signal": "tradeType + ': Top 10 Commodities'"},
+    "subtitle": "Source: DFAT Commodity Data (2014–2024)",
+    "fontSize": 16,
+    "fontWeight": "bold",
+    "anchor": "middle",
+    "color": "#3b2400",
+    "subtitleFontSize": 12,
+    "subtitleColor": "#4b3a1f"
+  },
+
+  "data": {"url": "Data/top_commodities_2014_2024.csv"},
+
+  "params": [
+    {"name": "yearFilter"},
+    {"name": "tradeType"}
+  ],
+
+  "transform": [
+    {"filter": "datum.Year == yearFilter"},
+    {
+      "calculate": "tradeType == 'Exports' ? datum['Exports_A$b'] : datum['Imports_A$b']",
+      "as": "TradeValue"
+    },
+    {
+      "window": [{"op": "rank", "as": "Rank"}],
+      "sort": [{"field": "TradeValue", "order": "descending"}]
+    },
+    {"filter": "datum.Rank <= 10"}
+  ],
+
+  "layer": [
+    {
+      "mark": {"type": "bar", "cornerRadiusEnd": 4},
+      "encoding": {
+        "y": {
+          "field": "Commodity",
+          "type": "nominal",
+          "sort": "-x",
+          "title": "Commodity",
+          "axis": {
+            "labelFontSize": 11,
+            "titleFontSize": 12,
+            "labelLimit": 100,
+            "labelPadding": 5,
+            "labelColor": "#3b2400",
+            "titleColor": "#3b2400",
+            "labelAlign": "right"
+          }
+        },
+        "x": {
+          "field": "TradeValue",
+          "type": "quantitative",
+          "title": "Trade Value (A$ Billion)",
+          "axis": {
+            "titleFontSize": 12,
+            "labelFontSize": 11,
+            "labelColor": "#3b2400",
+            "titleColor": "#3b2400"
+          },
+          "scale": {"nice": true, "zero": true}
+        },
+        "color": {
+          "field": "Commodity",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Iron Ore", "Coal", "Natural Gas", "LNG", "Gold", 
+              "Wheat", "Beef", "Aluminium", "Copper", "Education",
+              "Vehicles", "Machinery", "Electronics", "Pharmaceuticals"
+            ],
+            "range": [
+              "#e15759", "#f28e2b", "#76b7b2", "#5dade2", "#edc948",
+              "#59a14f", "#cd5c5c", "#af7ac5", "#ec7063", "#f8b739",
+              "#85c1e2", "#aeb6bf", "#a3ccb8", "#d7bde2"
+            ]
+          },
+          "legend": null
+        },
+        "tooltip": [
+          {"field": "Commodity", "title": "Commodity"},
+          {"field": "TradeValue", "title": "Trade Value (A$B)", "format": ".1f"},
+          {"field": "Year", "title": "Year", "format": "d"}
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 5,
+        "fontSize": 11,
+        "fontWeight": "600",
+        "fill": "#3b2400"
+      },
+      "encoding": {
+        "y": {"field": "Commodity", "type": "nominal", "sort": "-x"},
+        "x": {"field": "TradeValue", "type": "quantitative"},
+        "text": {"field": "TradeValue", "format": ".1f"}
+      }
+    }
+  ],
+
+  "config": {
+    "view": { "stroke": null },
+    "axis": {
+      "labelFont": "Inter",
+      "titleFont": "Inter"
+    },
+    "title": {"font": "Inter"}
+  }
+}

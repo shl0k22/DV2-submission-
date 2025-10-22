@@ -1,0 +1,98 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "background": "#fffaf3",
+  "width": 550,
+  "height": 400,
+  "padding": 10,
+  "title": {
+    "text": "Port Share by Major Australian Ports (2024)",
+    "subtitle": "Each slice represents a port's share of total trade value | Source: DFAT & ABS (2024)",
+    "fontSize": 16,
+    "fontWeight": "bold",
+    "anchor": "middle",
+    "color": "#3b2400",
+    "subtitleFontSize": 12,
+    "subtitleColor": "#4b3a1f"
+  },
+  "data": {"url": "Data/Ports_Trade.csv"},
+  "params": [
+    {"name": "tradeType", "value": "Exports"},
+    {"name": "yearFilter", "value": 2024}
+  ],
+  "transform": [
+    {
+      "calculate": "tradeType == 'Exports' ? datum.Export_Value_A$b : datum.Import_Value_A$b",
+      "as": "TradeValue"
+    },
+    {"filter": "datum.TradeValue != null && datum.TradeValue > 0"},
+    {
+      "aggregate": [{"op": "sum", "field": "TradeValue", "as": "PortTotal"}],
+      "groupby": ["Port", "State"]
+    },
+    {"joinaggregate": [{"op": "sum", "field": "PortTotal", "as": "TotalTrade"}]},
+    {"calculate": "(datum.PortTotal / datum.TotalTrade) * 100", "as": "SharePercent"},
+    {"window": [{"op": "rank", "as": "rank"}], "sort": [{"field": "PortTotal", "order": "descending"}]},
+    {"filter": "datum.rank <= 4"}
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "arc",
+        "innerRadius": 70,
+        "outerRadius": 150,
+        "stroke": "#ffffff",
+        "strokeWidth": 3,
+        "padAngle": 0.02
+      },
+      "encoding": {
+        "theta": {"field": "SharePercent", "type": "quantitative", "stack": true},
+        "color": {
+          "field": "Port",
+          "type": "nominal",
+          "scale": {
+            "domain": ["Melbourne", "Sydney", "Brisbane", "Fremantle"],
+            "range": ["#3B82F6", "#10B981", "#F59E0B", "#EF4444"]
+          },
+          "legend": {
+            "title": "Port",
+            "orient": "right",
+            "labelFontSize": 12,
+            "titleFontSize": 13,
+            "symbolSize": 120,
+            "offset": 15,
+            "titleColor": "#3b2400",
+            "labelColor": "#3b2400"
+          }
+        },
+        "tooltip": [
+          {"field": "Port", "title": "Port"},
+          {"field": "State", "title": "State"},
+          {"field": "PortTotal", "title": "Trade Value (A$ Billion)", "format": ".2f"},
+          {"field": "SharePercent", "title": "Share (%)", "format": ".1f"}
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "radius": 180,
+        "fontSize": 13,
+        "fontWeight": "600",
+        "fill": "#2b1800",
+        "align": "center",
+        "baseline": "middle"
+      },
+      "encoding": {
+        "theta": {"field": "SharePercent", "type": "quantitative", "stack": true},
+        "text": {"field": "Port"}
+      }
+    }
+  ],
+  "view": {"stroke": null},
+  "config": {
+    "axis": {"labelFont": "Inter", "titleFont": "Inter"},
+    "legend": {"labelFont": "Inter", "titleFont": "Inter"},
+    "title": {"font": "Inter"},
+    "text": {"font": "Inter"}
+  }
+}

@@ -1,0 +1,9 @@
+OriginCountry,Port,Commodity,Value_A$b,OriginLat,OriginLon,PortLat,PortLon
+China,Port Hedland,Iron Ore,60,35.8617,104.1954,-20.3104,118.6111
+Japan,Brisbane,LNG,25,36.2048,138.2529,-27.4698,153.0251
+India,Melbourne,Coal,15,20.5937,78.9629,-37.8136,144.9631
+South Korea,Sydney,Coal,12,35.9078,127.7669,-33.8688,151.2093
+United States,Fremantle,Wheat,10,37.0902,-95.7129,-32.056,115.744
+Singapore,Melbourne,Gold,8,1.3521,103.8198,-37.8136,144.9631
+Thailand,Brisbane,Iron Ore,6,15.8700,100.9925,-27.4698,153.0251
+United Kingdom,Melbourne,Precious Metals,5,55.3781,-3.4360,-37.8136,144.9631

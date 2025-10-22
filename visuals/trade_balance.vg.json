@@ -1,0 +1,154 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Australia's trade balance showing surplus and deficit trends (1995–2024)",
+  "width": 550,
+  "height": 300,
+  "background": "#fffaf3",
+  "padding": 5,
+
+  "data": {
+    "values": [
+      {"Year": 1995, "TradeBalance": -8},
+      {"Year": 1996, "TradeBalance": -12},
+      {"Year": 1997, "TradeBalance": -10},
+      {"Year": 1998, "TradeBalance": -16},
+      {"Year": 1999, "TradeBalance": -20},
+      {"Year": 2000, "TradeBalance": -18},
+      {"Year": 2001, "TradeBalance": -22},
+      {"Year": 2002, "TradeBalance": -19},
+      {"Year": 2003, "TradeBalance": -14},
+      {"Year": 2004, "TradeBalance": -9},
+      {"Year": 2005, "TradeBalance": -7},
+      {"Year": 2006, "TradeBalance": -4},
+      {"Year": 2007, "TradeBalance": -3},
+      {"Year": 2008, "TradeBalance": -8},
+      {"Year": 2009, "TradeBalance": -2},
+      {"Year": 2010, "TradeBalance": 5},
+      {"Year": 2011, "TradeBalance": 12},
+      {"Year": 2012, "TradeBalance": 9},
+      {"Year": 2013, "TradeBalance": 3},
+      {"Year": 2014, "TradeBalance": 15},
+      {"Year": 2015, "TradeBalance": -5},
+      {"Year": 2016, "TradeBalance": 22},
+      {"Year": 2017, "TradeBalance": 40},
+      {"Year": 2018, "TradeBalance": 60},
+      {"Year": 2019, "TradeBalance": 78},
+      {"Year": 2020, "TradeBalance": 70},
+      {"Year": 2021, "TradeBalance": 110},
+      {"Year": 2022, "TradeBalance": 128},
+      {"Year": 2023, "TradeBalance": 142},
+      {"Year": 2024, "TradeBalance": 150}
+    ]
+  },
+
+  "transform": [
+    {"calculate": "datum.TradeBalance > 0 ? 'Surplus' : 'Deficit'", "as": "BalanceType"}
+  ],
+
+  "layer": [
+    {
+      "mark": {"type": "rule", "strokeWidth": 1, "color": "#c9a97a", "strokeDash": [3, 3], "opacity": 0.5},
+      "encoding": {"y": {"datum": 0}}
+    },
+    {
+      "mark": {
+        "type": "bar",
+        "cornerRadiusTopLeft": 3,
+        "cornerRadiusTopRight": 3,
+        "cornerRadiusBottomLeft": 3,
+        "cornerRadiusBottomRight": 3,
+        "width": {"band": 0.75}
+      },
+      "encoding": {
+        "x": {
+          "field": "Year",
+          "type": "ordinal",
+          "title": "Year",
+          "axis": {
+            "labelAngle": -45,
+            "labelFontSize": 10,
+            "titleFontSize": 12,
+            "titleFontWeight": 600,
+            "titleColor": "#3b2400",
+            "labelColor": "#4b3a1f",
+            "grid": false,
+            "values": [1995, 2000, 2005, 2010, 2015, 2020, 2024]
+          }
+        },
+        "y": {
+          "field": "TradeBalance",
+          "type": "quantitative",
+          "title": "Trade Balance (A$ Billion)",
+          "scale": {"domain": [-30, 160]},
+          "axis": {
+            "labelFontSize": 11,
+            "titleFontSize": 12,
+            "titleFontWeight": 600,
+            "titleColor": "#3b2400",
+            "labelColor": "#4b3a1f",
+            "gridColor": "#e8d5be",
+            "gridOpacity": 0.4
+          }
+        },
+        "color": {
+          "field": "BalanceType",
+          "type": "nominal",
+          "scale": {
+            "domain": ["Surplus", "Deficit"],
+            "range": ["#3BAA3F", "#E24B4B"]
+          },
+          "legend": {
+            "title": "",
+            "orient": "bottom",
+            "direction": "horizontal",
+            "columns": 2,
+            "symbolSize": 100,
+            "symbolType": "square",
+            "labelFontSize": 11,
+            "labelColor": "#3b2400",
+            "offset": 10
+          }
+        },
+        "tooltip": [
+          {"field": "Year", "type": "ordinal", "title": "Year"},
+          {"field": "TradeBalance", "type": "quantitative", "title": "Trade Balance (A$B)", "format": "+.1f"},
+          {"field": "BalanceType", "type": "nominal", "title": "Type"}
+        ]
+      }
+    },
+    {
+      "transform": [{"filter": "datum.Year % 5 == 0 || datum.Year == 2024"}],
+      "mark": {"type": "text", "align": "center", "baseline": "middle", "fontWeight": 600, "fontSize": 10, "color": "#2b1800"},
+      "encoding": {
+        "x": {"field": "Year", "type": "ordinal"},
+        "y": {"field": "TradeBalance", "type": "quantitative"},
+        "text": {"field": "TradeBalance", "format": ".0f"},
+        "dy": {
+          "condition": [{"test": "datum.TradeBalance > 0", "value": -12}],
+          "value": 12
+        }
+      }
+    },
+    {
+      "mark": {"type": "rule", "strokeWidth": 2, "color": "#ffa726", "opacity": 0.4},
+      "encoding": {"x": {"datum": "2020"}}
+    }
+  ],
+
+  "config": {
+    "view": {"stroke": null},
+    "axis": {"domainColor": "#a0826d", "tickColor": "#a0826d"}
+  },
+
+  "title": {
+    "text": "Australia's Trade Balance (1995–2024)",
+    "subtitle": "Positive values = Trade Surplus (Exports > Imports) · Negative values = Trade Deficit",
+    "anchor": "middle",
+    "fontSize": 16,
+    "fontWeight": 700,
+    "color": "#3b2400",
+    "subtitleFontSize": 12,
+    "subtitleColor": "#4b3a1f",
+    "offset": 8
+  }
+}

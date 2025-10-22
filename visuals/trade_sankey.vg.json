@@ -1,0 +1,229 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "Sankey-style flow of Australia's trade by Region → Commodity.",
+  "background": "#fffaf3",
+  "width": 1130,
+  "height": 520,
+  "padding": {"top": 10, "bottom": 5, "left": 5, "right": 5},
+  
+  "signals": [
+    {"name": "yearFilter", "value": 2024},
+    {"name": "tradeType", "value": "Exports"}
+  ],
+  "data": [
+    {
+      "name": "tradeData",
+      "url": "Data/trade_flows.csv",
+      "format": {"type": "csv"},
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.Year == yearFilter && datum.TradeDirection == tradeType"
+        },
+        {
+          "type": "aggregate",
+          "groupby": ["Region", "Commodity"],
+          "fields": ["TradeValue"],
+          "ops": ["sum"],
+          "as": ["TotalTrade"]
+        },
+        {"type": "formula", "expr": "datum.Region", "as": "stk1"},
+        {"type": "formula", "expr": "datum.Commodity", "as": "stk2"},
+        {"type": "formula", "expr": "datum.TotalTrade", "as": "size"}
+      ]
+    },
+    {
+      "name": "nodes",
+      "source": "tradeData",
+      "transform": [
+        {"type": "formula", "expr": "datum.stk1 + '_' + datum.stk2", "as": "key"},
+        {"type": "fold", "fields": ["stk1", "stk2"], "as": ["stack", "grpId"]},
+        {
+          "type": "stack",
+          "groupby": ["stack"],
+          "sort": {"field": "grpId", "order": "ascending"},
+          "field": "size"
+        },
+        {"type": "formula", "expr": "(datum.y0 + datum.y1) / 2", "as": "yc"}
+      ]
+    },
+    {
+      "name": "groups",
+      "source": "nodes",
+      "transform": [
+        {
+          "type": "aggregate",
+          "groupby": ["stack", "grpId"],
+          "fields": ["size"],
+          "ops": ["sum"],
+          "as": ["total"]
+        },
+        {
+          "type": "stack",
+          "groupby": ["stack"],
+          "sort": {"field": "grpId", "order": "ascending"},
+          "field": "total"
+        },
+        {"type": "formula", "expr": "scale('y', datum.y0)", "as": "scaledY0"},
+        {"type": "formula", "expr": "scale('y', datum.y1)", "as": "scaledY1"}
+      ]
+    },
+    {
+      "name": "destinationNodes",
+      "source": "nodes",
+      "transform": [
+        {"type": "filter", "expr": "datum.stack == 'stk2'"}
+      ]
+    },
+    {
+      "name": "edges",
+      "source": "nodes",
+      "transform": [
+        {"type": "filter", "expr": "datum.stack == 'stk1'"},
+        {
+          "type": "lookup",
+          "from": "destinationNodes",
+          "key": "key",
+          "fields": ["key"],
+          "as": ["target"]
+        },
+        {
+          "type": "linkpath",
+          "orient": "horizontal",
+          "shape": "diagonal",
+          "sourceY": {"expr": "scale('y', datum.yc)"},
+          "sourceX": {"expr": "scale('x', 'stk1') + bandwidth('x')"},
+          "targetY": {"expr": "scale('y', datum.target.yc)"},
+          "targetX": {"expr": "scale('x', 'stk2')"}
+        },
+        {
+          "type": "formula",
+          "expr": "range('y')[0] - scale('y', datum.size)",
+          "as": "strokeWidth"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "x",
+      "type": "band",
+      "range": "width",
+      "domain": ["stk1", "stk2"],
+      "paddingOuter": 0.05,
+      "paddingInner": 0.85
+    },
+    {
+      "name": "y",
+      "type": "linear",
+      "range": "height",
+      "domain": {"data": "nodes", "field": "y1"}
+    },
+    {
+      "name": "colorRegion",
+      "type": "ordinal",
+      "domain": ["Asia-Pacific", "Europe", "North America", "Middle East"],
+      "range": ["#ffb703", "#219ebc", "#fb8500", "#8ecae6"]
+    },
+    {
+      "name": "colorCommodity",
+      "type": "ordinal",
+      "domain": [
+        "Iron Ore", "Coal", "LNG", "Gold", "Wheat", "Beef", 
+        "Aluminium", "Copper", "Natural Gas", "Education",
+        "Vehicles", "Machinery", "Pharmaceuticals", "Electronics",
+        "Wool", "Wine"
+      ],
+      "range": [
+        "#e15759", "#f28e2b", "#76b7b2", "#edc948", "#59a14f", "#cd5c5c",
+        "#af7ac5", "#ec7063", "#5dade2", "#f8b739",
+        "#85c1e2", "#aeb6bf", "#d7bde2", "#a3ccb8",
+        "#f4a582", "#8b4789"
+      ]
+    },
+    {
+      "name": "stackNames",
+      "type": "ordinal",
+      "range": ["Region", "Commodity"],
+      "domain": ["stk1", "stk2"]
+    }
+  ],
+  "axes": [
+    {
+      "orient": "bottom",
+      "scale": "x",
+      "encode": {
+        "labels": {
+          "update": {
+            "text": {"scale": "stackNames", "field": "value"},
+            "fontWeight": {"value": "bold"},
+            "fontSize": {"value": 14},
+            "fill": {"value": "#3b2400"}
+          }
+        }
+      }
+    }
+  ],
+  "marks": [
+    {
+      "type": "path",
+      "from": {"data": "edges"},
+      "encode": {
+        "update": {
+          "path": {"field": "path"},
+          "stroke": {"scale": "colorRegion", "field": "stk1"},
+          "strokeWidth": {"field": "strokeWidth"},
+          "strokeOpacity": {"value": 0.5},
+          "tooltip": {
+            "signal": "datum.stk1 + ' → ' + datum.target.grpId + ': A$' + format(datum.size, ',.0f') + 'B'"
+          }
+        },
+        "hover": {"strokeOpacity": {"value": 0.8}}
+      }
+    },
+    {
+      "type": "rect",
+      "from": {"data": "groups"},
+      "encode": {
+        "enter": {
+          "fill": [
+            {"test": "datum.stack == 'stk1'", "scale": "colorRegion", "field": "grpId"},
+            {"test": "datum.stack == 'stk2'", "scale": "colorCommodity", "field": "grpId"},
+            {"value": "#d4d4d4"}
+          ],
+          "width": {"scale": "x", "band": 1}
+        },
+        "update": {
+          "x": {"scale": "x", "field": "stack"},
+          "y": {"field": "scaledY0"},
+          "y2": {"field": "scaledY1"},
+          "fillOpacity": {"value": 0.9},
+          "tooltip": {
+            "signal": "datum.grpId + ': A$' + format(datum.total, ',.0f') + 'B'"
+          }
+        },
+        "hover": {"fillOpacity": {"value": 1}}
+      }
+    },
+    {
+      "type": "text",
+      "from": {"data": "groups"},
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "datum.stack == 'stk1' ? scale('x', 'stk1') - 15 : scale('x', 'stk2') + bandwidth('x') + 15"
+          },
+          "yc": {"signal": "(datum.scaledY0 + datum.scaledY1) / 2"},
+          "align": {"signal": "datum.stack == 'stk1' ? 'right' : 'left'"},
+          "baseline": {"value": "middle"},
+          "fontWeight": {"value": "bold"},
+          "fontSize": {"value": 13},
+          "fill": {"value": "#2b1800"},
+          "text": {
+            "signal": "abs(datum.scaledY1 - datum.scaledY0) > 15 ? datum.grpId : ''"
+          }
+        }
+      }
+    }
+  ]
+}

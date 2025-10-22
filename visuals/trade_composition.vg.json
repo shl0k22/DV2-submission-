@@ -1,0 +1,130 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "background": "#fdf7f0",
+  "width": 850,
+  "height": 420,
+
+  "title": {
+    "text": "Australia's Trade Composition Over Time (2014–2024)",
+    "subtitle": "Stacked area chart showing major commodities by trade direction | Source: DFAT & ABS (2024)",
+    "fontSize": 16,
+    "fontWeight": "bold",
+    "anchor": "middle",
+    "color": "#3b2400",
+    "subtitleFontSize": 12,
+    "subtitleColor": "#4b3a1f",
+    "offset": 10
+  },
+
+  "data": {"url": "Data/trade_composition.csv"},
+
+  "params": [
+    {"name": "tradeType", "value": "Exports"},
+    {"name": "yearFilter", "value": 2024}
+  ],
+
+  "transform": [
+    {
+      "calculate": "tradeType == 'Exports' ? datum.Exports_A$b : datum.Imports_A$b",
+      "as": "TradeValue"
+    },
+    {"filter": "datum.Year <= yearFilter"}
+  ],
+
+  "layer": [
+    {
+      "mark": {"type": "area", "interpolate": "monotone", "stroke": "#fff", "strokeWidth": 0.6, "opacity": 0.95},
+      "encoding": {
+        "x": {
+          "field": "Year",
+          "type": "quantitative",
+          "title": "Year",
+          "scale": {"domain": [2014, 2024]},
+          "axis": {
+            "labelAngle": -40,
+            "labelFontSize": 10,
+            "titleFontSize": 12,
+            "titleFontWeight": 600,
+            "titleColor": "#2b1800",
+            "labelColor": "#5c4a2a"
+          }
+        },
+        "y": {
+          "aggregate": "sum",
+          "field": "TradeValue",
+          "type": "quantitative",
+          "title": "Trade Value (A$ Billion)",
+          "axis": {
+            "labelFontSize": 11,
+            "titleFontSize": 13,
+            "titleFontWeight": 600,
+            "titleColor": "#2b1800",
+            "labelColor": "#4a3210",
+            "gridColor": "#e8d5be",
+            "gridOpacity": 0.5
+          }
+        },
+        "color": {
+          "field": "Commodity",
+          "type": "nominal",
+          "scale": {
+            "domain": ["Iron Ore", "Coal", "LNG", "Gold", "Beef", "Wheat"],
+            "range": ["#e15759", "#f28e2b", "#76b7b2", "#59a14f", "#edc948", "#4e79a7"]
+          },
+          "legend": {
+            "title": "Commodity",
+            "titleFontSize": 12,
+            "labelFontSize": 11,
+            "offset": 5,
+            "orient": "right",
+            "symbolSize": 120,
+            "symbolType": "circle"
+          }
+        },
+        "tooltip": [
+          {"field": "Year", "title": "Year"},
+          {"field": "Commodity", "title": "Commodity"},
+          {"field": "TradeValue", "title": "Trade Value (A$ Billion)", "format": ".1f"}
+        ]
+      }
+    },
+
+    
+    {
+      "data": {"values": [{"Year": 2020}]},
+      "transform": [{"filter": "yearFilter >= 2020"}],
+      "mark": {
+        "type": "rule",
+        "stroke": "#8b6f47",
+        "strokeDash": [5, 4],
+        "strokeWidth": 1.5,
+        "opacity": 0.85
+      },
+      "encoding": {"x": {"field": "Year", "type": "quantitative"}}
+    },
+
+    
+    {
+      "data": {"values": [{"Year": 2020}]},
+      "transform": [{"filter": "yearFilter >= 2020"}],
+      "mark": {
+        "type": "text",
+        "text": "COVID-19 impact ↓",
+        "font": "Inter",
+        "fontSize": 12.5,
+        "fontWeight": "bold",
+        "color": "#5a4633",
+        "align": "left",
+        "dx": 8,
+        "dy": -110
+      },
+      "encoding": {"x": {"field": "Year", "type": "quantitative"}}
+    }
+  ],
+
+  "config": {
+    "axis": {"labelFont": "Inter", "titleFont": "Inter", "domainColor": "#a0826d", "tickColor": "#a0826d"},
+    "legend": {"labelFont": "Inter", "titleFont": "Inter"},
+    "title": {"font": "Inter"}
+  }
+}

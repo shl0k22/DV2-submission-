@@ -1,0 +1,144 @@
+Year,Region,Commodity,TradeDirection,TradeValue
+2014,Asia-Pacific,Iron Ore,Exports,75
+2014,Asia-Pacific,Coal,Exports,42
+2014,Asia-Pacific,LNG,Exports,20
+2014,Asia-Pacific,Wheat,Exports,8
+2014,Europe,Gold,Exports,10
+2014,Europe,Wine,Exports,4
+2014,North America,Beef,Exports,5
+2014,North America,Wool,Exports,3
+2014,Middle East,LNG,Exports,6
+2014,North America,Pharmaceuticals,Imports,7
+2014,Asia-Pacific,Electronics,Imports,22
+2014,Europe,Vehicles,Imports,12
+2014,Asia-Pacific,Machinery,Imports,9
+2015,Asia-Pacific,Iron Ore,Exports,80
+2015,Asia-Pacific,Coal,Exports,44
+2015,Asia-Pacific,LNG,Exports,23
+2015,Asia-Pacific,Wheat,Exports,9
+2015,Europe,Gold,Exports,11
+2015,Europe,Wine,Exports,4
+2015,North America,Beef,Exports,6
+2015,North America,Wool,Exports,3
+2015,Middle East,LNG,Exports,7
+2015,North America,Pharmaceuticals,Imports,8
+2015,Asia-Pacific,Electronics,Imports,24
+2015,Europe,Vehicles,Imports,13
+2015,Asia-Pacific,Machinery,Imports,10
+2016,Asia-Pacific,Iron Ore,Exports,84
+2016,Asia-Pacific,Coal,Exports,46
+2016,Asia-Pacific,LNG,Exports,25
+2016,Asia-Pacific,Wheat,Exports,9
+2016,Europe,Gold,Exports,12
+2016,Europe,Wine,Exports,5
+2016,North America,Beef,Exports,6
+2016,North America,Wool,Exports,3
+2016,Middle East,LNG,Exports,8
+2016,North America,Pharmaceuticals,Imports,8
+2016,Asia-Pacific,Electronics,Imports,26
+2016,Europe,Vehicles,Imports,14
+2016,Asia-Pacific,Machinery,Imports,11
+2017,Asia-Pacific,Iron Ore,Exports,89
+2017,Asia-Pacific,Coal,Exports,48
+2017,Asia-Pacific,LNG,Exports,30
+2017,Asia-Pacific,Wheat,Exports,10
+2017,Europe,Gold,Exports,13
+2017,Europe,Wine,Exports,5
+2017,North America,Beef,Exports,7
+2017,North America,Wool,Exports,4
+2017,Middle East,LNG,Exports,9
+2017,North America,Pharmaceuticals,Imports,9
+2017,Asia-Pacific,Electronics,Imports,27
+2017,Europe,Vehicles,Imports,15
+2017,Asia-Pacific,Machinery,Imports,12
+2018,Asia-Pacific,Iron Ore,Exports,94
+2018,Asia-Pacific,Coal,Exports,50
+2018,Asia-Pacific,LNG,Exports,36
+2018,Asia-Pacific,Wheat,Exports,11
+2018,Europe,Gold,Exports,15
+2018,Europe,Wine,Exports,6
+2018,North America,Beef,Exports,8
+2018,North America,Wool,Exports,4
+2018,Middle East,LNG,Exports,10
+2018,North America,Pharmaceuticals,Imports,10
+2018,Asia-Pacific,Electronics,Imports,28
+2018,Europe,Vehicles,Imports,16
+2018,Asia-Pacific,Machinery,Imports,13
+2019,Asia-Pacific,Iron Ore,Exports,98
+2019,Asia-Pacific,Coal,Exports,53
+2019,Asia-Pacific,LNG,Exports,42
+2019,Asia-Pacific,Wheat,Exports,12
+2019,Europe,Gold,Exports,17
+2019,Europe,Wine,Exports,6
+2019,North America,Beef,Exports,9
+2019,North America,Wool,Exports,4
+2019,Middle East,LNG,Exports,11
+2019,North America,Pharmaceuticals,Imports,11
+2019,Asia-Pacific,Electronics,Imports,29
+2019,Europe,Vehicles,Imports,17
+2019,Asia-Pacific,Machinery,Imports,14
+2020,Asia-Pacific,Iron Ore,Exports,105
+2020,Asia-Pacific,Coal,Exports,55
+2020,Asia-Pacific,LNG,Exports,50
+2020,Asia-Pacific,Wheat,Exports,13
+2020,Europe,Gold,Exports,18
+2020,Europe,Wine,Exports,5
+2020,North America,Beef,Exports,9
+2020,North America,Wool,Exports,4
+2020,Middle East,LNG,Exports,12
+2020,North America,Pharmaceuticals,Imports,11
+2020,Asia-Pacific,Electronics,Imports,30
+2020,Europe,Vehicles,Imports,15
+2020,Asia-Pacific,Machinery,Imports,14
+2021,Asia-Pacific,Iron Ore,Exports,110
+2021,Asia-Pacific,Coal,Exports,57
+2021,Asia-Pacific,LNG,Exports,55
+2021,Asia-Pacific,Wheat,Exports,14
+2021,Europe,Gold,Exports,19
+2021,Europe,Wine,Exports,6
+2021,North America,Beef,Exports,10
+2021,North America,Wool,Exports,5
+2021,Middle East,LNG,Exports,13
+2021,North America,Pharmaceuticals,Imports,12
+2021,Asia-Pacific,Electronics,Imports,32
+2021,Europe,Vehicles,Imports,17
+2021,Asia-Pacific,Machinery,Imports,15
+2022,Asia-Pacific,Iron Ore,Exports,115
+2022,Asia-Pacific,Coal,Exports,58
+2022,Asia-Pacific,LNG,Exports,58
+2022,Asia-Pacific,Wheat,Exports,15
+2022,Europe,Gold,Exports,20
+2022,Europe,Wine,Exports,7
+2022,North America,Beef,Exports,10
+2022,North America,Wool,Exports,5
+2022,Middle East,LNG,Exports,14
+2022,North America,Pharmaceuticals,Imports,12
+2022,Asia-Pacific,Electronics,Imports,33
+2022,Europe,Vehicles,Imports,18
+2022,Asia-Pacific,Machinery,Imports,16
+2023,Asia-Pacific,Iron Ore,Exports,118
+2023,Asia-Pacific,Coal,Exports,59
+2023,Asia-Pacific,LNG,Exports,60
+2023,Asia-Pacific,Wheat,Exports,16
+2023,Europe,Gold,Exports,22
+2023,Europe,Wine,Exports,7
+2023,North America,Beef,Exports,11
+2023,North America,Wool,Exports,5
+2023,Middle East,LNG,Exports,15
+2023,North America,Pharmaceuticals,Imports,13
+2023,Asia-Pacific,Electronics,Imports,34
+2023,Europe,Vehicles,Imports,19
+2023,Asia-Pacific,Machinery,Imports,17
+2024,Asia-Pacific,Iron Ore,Exports,120
+2024,Asia-Pacific,Coal,Exports,61
+2024,Asia-Pacific,LNG,Exports,65
+2024,Asia-Pacific,Wheat,Exports,17
+2024,Europe,Gold,Exports,23
+2024,Europe,Wine,Exports,8
+2024,North America,Beef,Exports,12
+2024,North America,Wool,Exports,6
+2024,Middle East,LNG,Exports,16
+2024,North America,Pharmaceuticals,Imports,13
+2024,Asia-Pacific,Electronics,Imports,35
+2024,Europe,Vehicles,Imports,20
+2024,Asia-Pacific,Machinery,Imports,18

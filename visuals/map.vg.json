@@ -1,0 +1,164 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 950,
+  "height": 520,
+  
+  "background": "transparent",
+  "title": {
+    "text": "Australia's Trade Partners — Interactive Map",
+    "subtitle": "Source: ABS & DFAT (2014–2024)",
+    "anchor": "middle",
+    "font": "Playfair Display",
+    "fontSize": 16,
+    "fontWeight": 600,
+    "subtitleFontSize": 12,
+    "subtitleColor": "#4b3a1f",
+    "color": "#3b2400"
+  },
+  "projection": { 
+    "type": "equalEarth", 
+    "rotate": [-10, 0, 0] 
+  },
+  "params": [
+    { "name": "yearFilter" },
+    { "name": "tradeType" }
+  ],
+  "layer": [
+    {
+      "data": { "sphere": true },
+      "mark": { "type": "geoshape", "fill": "#d8e6f3" }
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/FIT3179/Vega-Lite/main/3_choropleth_map/js/ne_110m_admin_0_countries.topojson",
+        "format": { 
+          "type": "topojson", 
+          "feature": "ne_110m_admin_0_countries" 
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": "#f7f3ef",
+        "stroke": "#ccc",
+        "strokeWidth": 0.5
+      }
+    },
+    {
+      "data": { "url": "Data/exports2024.csv" },
+      "transform": [
+        { "filter": "datum.Year == yearFilter" },
+        {
+          "lookup": "Country",
+          "from": {
+            "data": {
+              "url": "https://raw.githubusercontent.com/FIT3179/Vega-Lite/main/3_choropleth_map/js/ne_110m_admin_0_countries.topojson",
+              "format": { 
+                "type": "topojson", 
+                "feature": "ne_110m_admin_0_countries" 
+              }
+            },
+            "key": "properties.NAME",
+            "fields": ["type", "geometry"]
+          }
+        },
+        {
+          "calculate": "tradeType == 'Exports' ? datum.Exports_A$b : datum.Imports_A$b",
+          "as": "TradeValue"
+        }
+      ],
+      "mark": { 
+        "type": "geoshape", 
+        "stroke": "#333", 
+        "strokeWidth": 0.5,
+        "cursor": "pointer"
+      },
+      "encoding": {
+        "color": {
+          "field": "TradeValue",
+          "type": "quantitative",
+          "title": {
+            "signal": "tradeType == 'Exports' ? 'Export Value (A$ Billion)' : 'Import Value (A$ Billion)'"
+          },
+          "scale": {
+            "domain": [0, 210],
+            "scheme": {
+              "signal": "tradeType == 'Exports' ? 'oranges' : 'teals'"
+            }
+          },
+          "legend": {
+            "orient": "bottom-right",
+            "direction": "horizontal",
+            "gradientLength": 300,
+            "titleFontSize": 12,
+            "labelFontSize": 11,
+            "titleColor": "#3b2400",
+            "offset": 5
+          }
+        },
+        "opacity": {
+          "condition": {
+            "param": "hover",
+            "empty": false,
+            "value": 1
+          },
+          "value": 0.85
+        },
+        "strokeWidth": {
+          "condition": {
+            "param": "hover",
+            "empty": false,
+            "value": 1.5
+          },
+          "value": 0.5
+        },
+        "tooltip": [
+          { "field": "Country", "title": "Country" },
+          { "field": "Year", "title": "Year" },
+          {
+            "field": "Exports_A$b",
+            "title": "Exports (A$B)",
+            "format": ".1f"
+          },
+          {
+            "field": "Imports_A$b",
+            "title": "Imports (A$B)",
+            "format": ".1f"
+          }
+        ]
+      },
+      "params": [
+        {
+          "name": "hover",
+          "select": {
+            "type": "point",
+            "on": "mouseover",
+            "clear": "mouseout"
+          }
+        }
+      ]
+    },
+    {
+      "data": { 
+        "graticule": { "step": [20, 20] } 
+      },
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#b3b3b3",
+        "strokeWidth": 0.4,
+        "fill": null
+      }
+    }
+  ],
+  "config": {
+    "view": { "stroke": null },
+    "background": "#fdf9f3",
+    "legend": {
+      "orient": "bottom-right",
+      "offset": 5,
+      "labelFontSize": 11,
+      "titleFontSize": 12,
+      "titleColor": "#3b2400",
+      "padding": 15
+    }
+  }
+}
