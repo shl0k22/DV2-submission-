@@ -1,0 +1,371 @@
+/* =========================================
+   GLOBAL LAYOUT
+========================================= */
+body {
+  background: linear-gradient(to right, #edd9b4, #f3e4cc, #edd9b4);
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", sans-serif;
+  color: #222;
+}
+
+.page {
+  background-color: #fef8ec;
+  border: 2px solid #000000;
+  width: 95%;
+  max-width: 1200px;
+  padding: 20px;
+  margin: 25px auto;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+}
+
+.frames {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: auto;
+}
+
+/* =========================================
+   HEADER — DARK VERSION
+========================================= */
+.darkHeader {
+  background: linear-gradient(145deg, #3a1f0a, #2a1405);
+  color: #fffaf1;
+  text-align: center;
+  border-radius: 20px;
+  padding: 35px 20px 40px 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 1.4s ease-in;
+}
+
+.darkHeader h1 {
+  font-family: "Playfair Display", serif;
+  font-size: 2.9rem;
+  font-weight: 700;
+  color: #fffaf1;
+  text-shadow: 1px 1px 4px rgba(255, 240, 210, 0.5);
+  letter-spacing: 0.6px;
+  margin-bottom: 10px;
+}
+
+.darkHeader .subtitle {
+  font-family: "Inter", sans-serif;
+  font-size: 1.25rem;
+  color: #f6e8d0;
+  margin-bottom: 18px;
+  font-weight: 400;
+}
+
+/* =========================================
+   HEADER CONTROLS
+========================================= */
+.controlRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  background-color: #fff5e6;
+  border: 2px solid #e6c7a0;
+  border-radius: 12px;
+  padding: 18px 25px;
+  margin: 25px auto;
+  max-width: 900px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.yearControl, .tradeControl {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: 10px;
+  color: #3b2400;
+  font-weight: 600;
+}
+
+#yearSlider {
+  flex: 1;
+  accent-color: #b26b00;
+  height: 6px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#yearValue {
+  font-weight: 700;
+  color: #b26b00;
+  font-size: 1rem;
+  min-width: 45px;
+  text-align: right;
+}
+
+.yearRange {
+  font-size: 0.9rem;
+  color: #77530b;
+  font-weight: 600;
+  margin-left: 2px;
+  opacity: 0.9;
+}
+
+#tradeType {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1.5px solid #bfa27b;
+  background-color: #fffaf3;
+  color: #3a2a00;
+  font-family: "Inter", sans-serif;
+  font-size: 1rem;
+  transition: 0.2s ease;
+}
+
+#tradeType:hover,
+#tradeType:focus {
+  border-color: #b26b00;
+  box-shadow: 0 0 4px #b26b00;
+}
+
+/* =========================================
+   INTRO TEXT
+========================================= */
+.introFrame {
+  background-color: #fffaf1;
+  border-radius: 15px;
+  padding: 25px 35px;
+  margin: 0 auto 25px auto;
+  max-width: 1100px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+}
+
+.introFrame p {
+  line-height: 1.7;
+  font-size: 1.15rem;
+  color: #2d1a00;
+  text-align: justify;
+  padding: 0 20px;
+}
+
+/* =========================================
+   SUBHEADINGS (ORANGE BOXES) - LARGEST
+========================================= */
+.subheadingFrame {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 85px;
+  background-color: #e09e41;
+  border-radius: 18px;
+  margin: 15px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.subheadingFrame h2 {
+  font-family: "Playfair Display", serif;
+  font-size: 28px;
+  color: #2b1a00;
+  font-weight: bold;
+  margin: 0;
+}
+
+/* =========================================
+   TEXT TITLES ABOVE CHARTS - MEDIUM-LARGE
+   (Partner Trade Trends, Port Share, etc.)
+========================================= */
+.chartTitle {
+  font-family: "Playfair Display", serif;
+  font-size: 18px;
+  color: #2b1a00;
+  font-weight: 600;
+  margin: 15px 0 10px 0;
+  text-align: center;
+}
+
+/* =========================================
+   MAP FRAME — CENTERED VISUAL
+========================================= */
+.sectionFrame {
+  background-color: #fffaf3;
+  border-radius: 16px;
+  margin: 0 auto 25px auto;
+  max-width: 1100px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 0 40px;
+  box-sizing: border-box;
+}
+
+.mapFrame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  margin: 10px auto 10px auto;
+  text-align: center;
+  width: 100%;
+  max-width: 1100px;
+}
+
+#map {
+  width: 100%;
+  max-width: 950px;
+  margin: 0 auto;
+}
+
+.chart-caption {
+  text-align: center;
+  margin-top: 6px;
+  font-size: 1rem;
+  color: #3a2e19;
+  font-style: italic;
+}
+
+/* =========================================
+   HOW TO READ (COMPACT)
+========================================= */
+.howToReadCompact {
+  background-color: #fff9f2;
+  border-left: 3px solid #d49a3a;
+  border-radius: 8px;
+  padding: 6px 14px;
+  margin: 8px auto 12px auto;
+  max-width: 850px;
+  box-shadow: none;
+  font-size: 0.92rem;
+  color: #4a3210;
+  opacity: 0.9;
+}
+
+.howToReadCompact p {
+  margin: 0;
+  line-height: 1.45;
+  text-align: left;
+}
+
+.howToReadCompact b {
+  color: #3b2500;
+}
+
+/* =========================================
+   DISCUSSION SECTION
+========================================= */
+.discussionFrame {
+  background-color: #fffaf3;
+  border-radius: 16px;
+  padding: 25px 40px;
+  margin: 10px auto 20px auto;
+  max-width: 1000px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.discussionFrame p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #2b1800;
+  text-align: justify;
+  margin: 0 auto;
+  max-width: 850px;
+}
+
+/* =========================================
+   CREDITS / FOOTER
+========================================= */
+.creditsFrame {
+  background-color: #d87e00;
+  border-radius: 16px;
+  text-align: center;
+  padding: 18px 25px;
+  margin-top: 40px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  font-size: 1rem;
+  color: #3b2a00;
+}
+
+.creditsFrame b {
+  color: #5c3a00;
+}
+
+.creditsFrame a {
+  color: #b26b00;
+  text-decoration: underline;
+}
+
+/* =========================================
+   ANIMATIONS
+========================================= */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================
+   HIGHLIGHT COLORS
+========================================= */
+.highlight-aus { color: #b26b00; font-weight: 700; }
+.highlight-import { color: #007a6f; font-weight: 700; }
+.highlight-export { color: #d17a00; font-weight: 700; }
+.highlight-partners { color: #8a4f00; font-weight: 700; }
+.highlight-trends { color: #15616d; font-weight: 700; }
+.highlight-commodities { color: #a05a00; font-weight: 700; }
+.highlight-ports { color: #cf4a00; font-weight: 700; }
+
+#timeseries {
+  display: block;
+  margin: 0 auto;
+  max-width: 950px;
+}
+
+.pure-g {
+  align-items: flex-start;
+}
+
+.pure-u-md-3-5 {
+  padding-right: 15px;
+}
+
+.pure-u-md-2-5 {
+  padding-left: 15px;
+}
+
+/* =========================================
+   TRADE COMPOSITION + FLOWS
+========================================= */
+#tradecomposition,
+#tradeflows {
+  width: 100%;
+  max-width: 100%;
+  margin: 20px auto;
+  min-height: 550px;
+}
+
+#tradecomposition .vega-embed,
+#tradeflows .vega-embed {
+  border-radius: 10px;
+  background-color: #fffaf3;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  padding: 10px;
+}
+
+.wideFrame {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+#tradeflows-section .mapFrame {
+  max-width: 100%;
+  width: 100%;
+}
+
+#tradeflows canvas,
+#tradeflows svg {
+  display: block;
+  margin: 0 auto;
+}
+
+#tradecomposition,
+#tradeflows {
+  animation: fadeIn 1.4s ease-in-out;
+}

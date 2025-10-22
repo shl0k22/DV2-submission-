@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trading Beyond Borders</title>
+
+  <!-- Vega Stack -->
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
+  <!-- PureCSS Grid -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+
+  <style>
+/* =========================================
+   GLOBAL LAYOUT - NARROW PAGE, GOOD CHARTS
+========================================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: linear-gradient(to right, #edd9b4, #f3e4cc, #edd9b4);
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", sans-serif;
+  color: #222;
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+.page {
+  background-color: #fef8ec;
+  border: 2px solid #000000;
+  width: 92%;
+  max-width: 1350px;
+  padding: 12px;
+  margin: 12px auto;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+  overflow-x: hidden;
+  overflow-y: visible;
+  box-sizing: border-box;
+}
+
+.frames {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: auto;
+}
+
+/* =========================================
+   HEADER – COMPACT
+========================================= */
+.darkHeader {
+  background: linear-gradient(145deg, #3a1f0a, #2a1405);
+  color: #fffaf1;
+  text-align: center;
+  border-radius: 12px;
+  padding: 15px 20px 18px 20px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+}
+
+.darkHeader h1 {
+  font-family: "Playfair Display", serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fffaf1;
+  text-shadow: 1px 1px 4px rgba(255, 240, 210, 0.5);
+  letter-spacing: 0.6px;
+  margin: 0 0 6px 0;
+}
+
+.darkHeader .subtitle {
+  font-family: "Inter", sans-serif;
+  font-size: 1rem;
+  color: #f6e8d0;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* =========================================
+   HEADER CONTROLS - COMPACT
+========================================= */
+.controlRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  background-color: #fff5e6;
+  border: 2px solid #e6c7a0;
+  border-radius: 8px;
+  padding: 10px 18px;
+  margin: 12px auto;
+  max-width: 800px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.yearControl, .tradeControl {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: 8px;
+  color: #3b2400;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+#yearSlider {
+  flex: 1;
+  accent-color: #b26b00;
+  height: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#yearValue {
+  font-weight: 700;
+  color: #b26b00;
+  font-size: 0.9rem;
+  min-width: 38px;
+  text-align: right;
+}
+
+.yearRange {
+  font-size: 0.8rem;
+  color: #77530b;
+  font-weight: 600;
+  margin-left: 2px;
+  opacity: 0.9;
+}
+
+#tradeType {
+  flex: 1;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1.5px solid #bfa27b;
+  background-color: #fffaf3;
+  color: #3a2a00;
+  font-family: "Inter", sans-serif;
+  font-size: 0.9rem;
+  transition: 0.2s ease;
+}
+
+#tradeType:hover,
+#tradeType:focus {
+  border-color: #b26b00;
+  box-shadow: 0 0 4px #b26b00;
+}
+
+/* =========================================
+   INTRO TEXT - COMPACT
+========================================= */
+.introFrame {
+  background-color: #fffaf1;
+  border-radius: 10px;
+  padding: 12px 20px;
+  margin: 0 auto 12px auto;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+}
+
+.introFrame p {
+  line-height: 1.45;
+  font-size: 0.88rem;
+  color: #2d1a00;
+  text-align: justify;
+  padding: 0 8px;
+  margin: 0;
+}
+
+/* =========================================
+   HORIZONTAL GRID LAYOUT - OPTIMIZED
+========================================= */
+.horizontalGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin: 12px 0;
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+.gridItem {
+  background-color: #fffaf3;
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  min-height: 580px;
+  max-width: 100%;
+  overflow: visible;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.gridItem.fullWidth {
+  grid-column: 1 / -1;
+}
+
+/* =========================================
+   MAP SECTION - FIXED GRID WITH NO OVERLAP
+========================================= */
+.mapSection {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  gap: 20px;
+  align-items: start;
+  width: 100%;
+}
+
+.mapVizContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+}
+
+.mapTextContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  position: relative;
+}
+
+/* =========================================
+   SECTION HEADERS - COMPACT
+========================================= */
+.sectionHeader {
+  background-color: #e09e41;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sectionHeader h2 {
+  font-family: "Playfair Display", serif;
+  font-size: 1.4rem;
+  color: #2b1a00;
+  font-weight: bold;
+  margin: 0;
+}
+
+.chartTitle {
+  font-family: "Playfair Display", serif;
+  font-size: 1.125rem;
+  color: #2b1a00;
+  font-weight: 600;
+  margin: 6px 0 12px 0;
+  text-align: center;
+}
+
+/* =========================================
+   VISUALIZATIONS - LARGER SIZES
+========================================= */
+.vizContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 10px 0 20px 0;
+  min-height: 450px;
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+.viz {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  display: block;
+  position: relative;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+#map {
+  width: 100%;
+  max-width: 100%;
+  min-height: 380px;
+  display: block;
+  overflow: visible;
+}
+
+#timeseries,
+#topcommodities,
+#portsmap,
+#tradebalance,
+#tradecomposition,
+#tradeflows {
+  width: 100%;
+  max-width: 100%;
+  min-height: 420px;
+  display: block;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+/* =========================================
+   HOW TO READ (COMPACT) - BELOW VIZ WITH PROPER SPACING
+========================================= */
+.howToReadCompact {
+  background-color: #fff9f2;
+  border-left: 3px solid #d49a3a;
+  border-radius: 5px;
+  padding: 5px 9px;
+  margin: 15px 0 10px 0;
+  font-size: 0.75rem;
+  color: #4a3210;
+  opacity: 0.9;
+  line-height: 1.3;
+  width: 100%;
+  position: relative;
+  clear: both;
+  z-index: 2;
+}
+
+.howToReadCompact p {
+  margin: 0;
+  line-height: 1.3;
+  text-align: left;
+}
+
+.howToReadCompact b {
+  color: #3b2500;
+}
+
+/* =========================================
+   DISCUSSION SECTION - SEPARATE FROM VIZ
+========================================= */
+.discussionText {
+  background-color: #fffdf8;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-top: 12px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #2b1800;
+  text-align: justify;
+  width: 100%;
+  position: relative;
+  clear: both;
+  z-index: 2;
+}
+
+.discussionText p {
+  margin: 0 0 6px 0;
+}
+
+.discussionText p:last-child {
+  margin-bottom: 0;
+}
+
+/* =========================================
+   CREDITS / FOOTER - COMPACT
+========================================= */
+.creditsFrame {
+  background-color: #f2d9b7;
+  border-radius: 10px;
+  text-align: center;
+  padding: 10px 18px;
+  margin-top: 15px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  font-size: 0.85rem;
+  color: #3b2a00;
+}
+
+.creditsFrame b {
+  color: #5c3a00;
+}
+
+.creditsFrame a {
+  color: #b26b00;
+  text-decoration: underline;
+}
+
+/* =========================================
+   ANIMATIONS
+========================================= */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================
+   HIGHLIGHT COLORS
+========================================= */
+.highlight-aus { color: #b26b00; font-weight: 700; }
+.highlight-import { color: #007a6f; font-weight: 700; }
+.highlight-export { color: #d17a00; font-weight: 700; }
+.highlight-partners { color: #8a4f00; font-weight: 700; }
+.highlight-trends { color: #15616d; font-weight: 700; }
+.highlight-commodities { color: #a05a00; font-weight: 700; }
+.highlight-ports { color: #cf4a00; font-weight: 700; }
+
+/* =========================================
+   VEGA EMBED RESPONSIVE CONTROLS - MINIMAL SCALING
+========================================= */
+.vega-embed {
+  width: 100% !important;
+  max-width: 100% !important;
+  display: block !important;
+  margin: 0 auto 20px auto;
+  position: relative;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+.vega-embed canvas,
+.vega-embed svg {
+  max-width: 100% !important;
+  width: 100% !important;
+  height: auto !important;
+  display: block;
+}
+
+.vega-embed .vega-actions {
+  display: none !important;
+}
+
+.vega-embed summary {
+  display: none !important;
+}
+
+.vega-embed.has-actions {
+  padding-right: 0 !important;
+}
+
+/* Specific fixes for charts that tend to overflow */
+#topcommodities,
+#tradebalance {
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+}
+
+#topcommodities .vega-embed,
+#tradebalance .vega-embed {
+  overflow: visible;
+  width: 100%;
+  max-width: 100%;
+}
+
+#topcommodities .vega-embed canvas,
+#topcommodities .vega-embed svg,
+#tradebalance .vega-embed canvas,
+#tradebalance .vega-embed svg {
+  max-width: 100% !important;
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* Force all Vega visualizations to scale appropriately */
+.viz canvas,
+.viz svg {
+  max-width: 100% !important;
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* Responsive behavior without aggressive scaling */
+@media screen and (max-width: 1350px) {
+  .viz {
+    min-height: 400px;
+  }
+}
+  </style>
+  
+  <script src="scripts/vega_lite_vis.js" defer></script>
+  
+  <!-- Force responsive Vega charts - minimal scaling -->
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          mutation.addedNodes.forEach(function(node) {
+            if (node.classList && node.classList.contains('vega-embed')) {
+              const canvas = node.querySelector('canvas');
+              const svg = node.querySelector('svg');
+              
+              if (canvas) {
+                canvas.style.maxWidth = '100%';
+                canvas.style.width = '100%';
+                canvas.style.height = 'auto';
+              }
+              if (svg) {
+                svg.style.maxWidth = '100%';
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+              }
+            }
+          });
+        });
+      });
+      
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+    });
+  </script>
+</head>
+
+<body>
+<div class="page">
+  <div class="frames">
+<!-- ================= HEADER ================= -->
+<div class="titleFrame darkHeader">
+  <h1>Trading Beyond Borders</h1>
+  <p class="subtitle">Exploring Australia's Trade Activity</p>
+</div>
+
+<!-- ================= CONTROLS ================= -->
+<div class="controlRow">
+  <div class="yearControl">
+    <label for="yearSlider">Year:</label>
+    <input id="yearSlider" type="range" min="2014" max="2024" step="1" value="2024">
+    <span id="yearValue">2024</span>
+    <small class="yearRange">(2014–2024)</small>
+  </div>
+
+  <div class="tradeControl">
+    <label for="tradeType">Trade Direction:</label>
+    <select id="tradeType">
+      <option value="Exports" selected>Exports (Aus → World)</option>
+      <option value="Imports">Imports (World → Aus)</option>
+    </select>
+  </div>
+</div>
+
+<!-- ================= INTRO TEXT ================= -->
+<section class="introFrame">
+  <div class="pure-g">
+    <div class="pure-u-md-1-2">
+      <p>
+        <em>Trading Beyond Borders</em> explores how 
+        <span class="highlight-aus">Australia</span> connects with the world through 
+        <span class="highlight-import">imports</span> and 
+        <span class="highlight-export">exports</span>. Using official data from the 
+        <b>Australian Bureau of Statistics (ABS)</b> and <b>DFAT</b> (2014–2024),
+        this visual story uncovers how trade relationships, economic demand, and global shifts have evolved across the decade.
+      </p>
+    </div>
+
+    <div class="pure-u-md-1-2">
+      <p>
+        We examine four key aspects: 
+        <span class="highlight-partners">top trading partners</span>, 
+        <span class="highlight-trends">long-term trends</span>, 
+        <span class="highlight-commodities">dominant commodities</span>, and 
+        <span class="highlight-ports">major ports</span> that keep Australia's trade flowing.
+        Use the controls above to switch between <b>Imports</b> and <b>Exports</b> 
+        and explore how trade composition changes over time.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HORIZONTAL GRID SECTIONS ================= -->
+<div class="horizontalGrid">
+  
+  <!-- Section 1: Map with Text on Right - Full Width -->
+  <div class="gridItem fullWidth">
+    <div class="sectionHeader">
+      <h2>1. Australia's Global Trade Partners</h2>
+    </div>
+    
+    <div class="mapSection">
+      <div class="mapVizContainer">
+        <div id="map" class="viz"></div>
+        <div class="howToReadCompact">
+          <p>💡 <b>How to read:</b> Countries are shaded by trade value (A$ Billion). 
+          <span style="color:#b26b00;">Orange</span> = <span class="highlight-export">exports</span>, 
+          <span style="color:#00796b;">teal</span> = <span class="highlight-import">imports</span>.</p>
+        </div>
+      </div>
+      
+      <div class="mapTextContainer">
+        <div class="discussionText">
+          <p><b>Asia-Pacific Dominance:</b> The map reveals <span class="highlight-aus">Australia's</span> heavy reliance on the <span class="highlight-partners">Asia-Pacific region</span>, 
+          with <span class="highlight-partners"><b>China</b>, <b>Japan</b>, and <b>South Korea</b></span> consistently ranking 
+          as the top three <span class="highlight-export">export destinations</span>. Together, these nations account for over <b>55%</b> of <span class="highlight-aus">Australia's</span> 
+          total <span class="highlight-export">export revenue</span>, driven primarily by demand for <span class="highlight-commodities">raw materials</span>.</p>
+        </div>
+        
+        <div class="discussionText">
+          <p><b>Emerging Markets:</b> <span class="highlight-partners"><b>India</b></span> has emerged as a significant growth market since 2018, 
+          with bilateral <span class="highlight-trends">trade increasing by over <b>40%</b></span>. Southeast Asian nations including 
+          <span class="highlight-partners"><b>Singapore</b>, <b>Thailand</b>, and <b>Vietnam</b></span> continue to strengthen their trade ties, 
+          reflecting <span class="highlight-aus">Australia's</span> strategic pivot toward diversifying its <span class="highlight-export">export base</span> beyond traditional partners.</p>
+        </div>
+        
+        <div class="discussionText">
+          <p><b>Western Trade Networks:</b> The <span class="highlight-partners"><b>United States</b> and <b>European Union</b></span> remain important 
+          partners for high-value <span class="highlight-export">exports</span> such as <span class="highlight-commodities"><b>wine</b>, <b>beef</b>, and <b>specialized minerals</b></span>. 
+          These relationships provide critical market diversity and help balance <span class="highlight-aus">Australia's</span> economic exposure 
+          to Asian markets.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+ <!-- Section 2: Trade Trends -->
+  <div class="gridItem">
+    <div class="sectionHeader">
+      <h2>2. Trade Trends Over Time</h2>
+    </div>
+    <div class="vizContainer">
+      <h3 class="chartTitle">Partner Trade Trends (2014–2024)</h3>
+      <div id="timeseries" class="viz"></div>
+    </div>
+    <div class="howToReadCompact">
+      <p>💡 Each line represents a major trading partner's trade value with <span class="highlight-aus">Australia</span> over the decade.</p>
+    </div>
+    <div class="discussionText">
+      <p><b>Decade of Growth:</b> Total <span class="highlight-trends">trade value has grown by <b>38%</b></span> from 2014 to 2024, 
+      demonstrating the resilience of <span class="highlight-aus">Australia's</span> economy.</p>
+      
+      <p><b>COVID-19 Impact:</b> The 2020 pandemic caused a temporary contraction, but <span class="highlight-aus">Australia's</span> resource-driven 
+      <span class="highlight-export">export model</span> enabled a rapid recovery.</p>
+      
+      <p><b>Import Stability:</b> <span class="highlight-import"><b>Imports</b></span> have remained stable across sectors 
+      such as <b>technology</b>, <b>vehicles</b>, and <b>manufactured goods</b>.</p>
+    </div>
+  </div>
+
+  <!-- Section 3: Top Commodities -->
+  <div class="gridItem">
+    <div class="sectionHeader">
+      <h2>3. Top Commodities by Value</h2>
+    </div>
+    <div class="vizContainer">
+      <h3 class="chartTitle">Top 10 Commodities by Value</h3>
+      <div id="topcommodities" class="viz"></div>
+    </div>
+    <div class="howToReadCompact">
+      <p>💡 Bars show the top 10 traded <span class="highlight-commodities">commodities</span> by value. 
+      <span style="color:#b26b00;">Orange</span> = <span class="highlight-export">exports</span>, 
+      <span style="color:#00796b;">teal</span> = <span class="highlight-import">imports</span>.</p>
+    </div>
+    <div class="discussionText">
+      <p><b>Resource Powerhouse:</b> <span class="highlight-commodities"><b>Iron ore</b></span> alone accounts for over <b>$105 billion</b> in annual <span class="highlight-export">exports</span>.</p>
+      
+      <p><b>Agricultural Excellence:</b> Traditional <span class="highlight-export">exports</span> such as <span class="highlight-commodities"><b>wheat</b>, <b>beef</b>, and <b>wool</b></span> 
+      maintain steady value, with wheat <span class="highlight-export">exports</span> reaching <b>$13 billion</b> in 2024.</p>
+      
+      <p><b>Tech Imports Rising:</b> On the <span class="highlight-import">import</span> side, <span class="highlight-commodities"><b>technology products</b>, <b>vehicles</b>, 
+      and <b>machinery</b></span> dominate.</p>
+    </div>
+  </div>
+
+  <!-- Section 4: Major Ports -->
+  <div class="gridItem">
+    <div class="sectionHeader">
+      <h2>4. Major Australian Ports</h2>
+    </div>
+    <div class="vizContainer">
+      <h3 class="chartTitle">Port Share of National Trade (2024)</h3>
+      <div id="portsmap" class="viz"></div>
+    </div>
+    <div class="howToReadCompact">
+      <p>💡 Each slice shows a <span class="highlight-ports">port's</span> percentage share of <span class="highlight-aus">Australia's</span> total trade value.</p>
+    </div>
+    <div class="discussionText">
+      <p><b>The Big Four:</b> <span class="highlight-ports"><b>Melbourne</b>, <b>Sydney</b>, <b>Brisbane</b>, and <b>Fremantle</b></span> 
+      together handle over <b>90%</b> of <span class="highlight-aus">Australia's</span> trade throughput.</p>
+      
+      <p><b>Port Specializations:</b> <span class="highlight-ports"><b>Melbourne</b> and <b>Sydney</b></span> dominate container <span class="highlight-import">imports</span>, 
+      while <span class="highlight-ports"><b>Fremantle</b></span> leads in <span class="highlight-export">exports</span> due to its proximity to Asian markets.</p>
+    </div>
+  </div>
+
+    <!-- Section 5: Trade Flows (Sankey) -->
+  <div class="gridItem">
+    <div class="sectionHeader">
+      <h2>5. Regional Trade Flows</h2>
+    </div>
+    <div class="vizContainer">
+      <h3 class="chartTitle">Region → Commodity Flow</h3>
+      <div id="tradeflows" class="viz"></div>
+    </div>
+    <div class="howToReadCompact">
+      <p>💡 Each ribbon connects a <span class="highlight-partners"><b>region</b></span> to a <span class="highlight-commodities"><b>commodity</b></span>. 
+      Ribbon thickness represents trade value magnitude (A$ Billion).</p>
+    </div>
+    <div class="discussionText">
+      <p><b>Asia-Pacific Flows:</b> The Sankey diagram reveals that the <span class="highlight-partners"><b>Asia-Pacific</b></span> region 
+      generates the thickest flows, particularly to <span class="highlight-commodities"><b>Iron Ore</b>, <b>LNG</b>, and <b>Coal</b></span>.</p>
+      
+      <p><b>Regional Specialization:</b> <span class="highlight-partners"><b>Europe</b></span> shows stronger flows toward <span class="highlight-commodities"><b>Gold</b></span> and 
+      agricultural products, while <span class="highlight-partners"><b>North America</b></span> demonstrates more balanced <span class="highlight-commodities">commodity distribution</span>.</p>
+    </div>
+  </div>
+
+</div>
+
+  <!-- Section 6: Trade Composition -->
+  <div class="gridItem">
+    <div class="sectionHeader">
+      <h2>6. Trade Composition (2014–2024)</h2>
+    </div>
+    <div class="vizContainer">
+      <div id="tradecomposition" class="viz"></div>
+    </div>
+    <div class="howToReadCompact">
+      <p>💡 The stacked area chart shows how <span class="highlight-commodities">commodities</span> contribute to total trade. 
+      The <b style="color:#8b6f47;">2020 marker</b> highlights COVID-19 impact.</p>
+    </div>
+    <div class="discussionText">
+      <p><b>Resource Dominance:</b> <span class="highlight-commodities"><b>Iron ore</b>, <b>coal</b>, 
+      and <b>LNG</b></span> collectively account for over <b>60%</b> of total <span class="highlight-export">export value</span>.</p>
+      
+      <p><b>Pandemic Dip and Recovery:</b> The 2020 slowdown is clearly visible, followed by a dramatic rebound 
+      in 2021-2022 as global <span class="highlight-trends">supply chains normalized</span>.</p>
+    </div>
+  </div>
+
+<!-- Section 7: Trade Balance -->
+  <div class="gridItem">
+    <div class="sectionHeader">
+      <h2>7. Australia's Trade Balance</h2>
+    </div>
+    <div class="vizContainer">
+      <h3 class="chartTitle">Trade Surplus and Deficit (2014–2024)</h3>
+      <div id="tradebalance" class="viz"></div>
+    </div>
+    <div class="howToReadCompact">
+      <p>💡 Bars represent annual <span class="highlight-trends">trade balance</span> (<span class="highlight-export">Exports</span> minus <span class="highlight-import">Imports</span>). 
+      <span style="color:#3BAA3F;">Green</span> = surplus, 
+      <span style="color:#E24B4B;">red</span> = deficit.</p>
+    </div>
+    <div class="discussionText">
+      <p><b>Consistent Surplus:</b> <span class="highlight-aus">Australia</span> has maintained a strong <span class="highlight-trends">trade surplus</span> every year since 2016, 
+      reaching a record <b>$155 billion</b> in 2024.</p>
+      
+      <p><b>Post-Pandemic Surge:</b> The sharp rise in surplus post-2020 reflects the rapid rebound 
+      in global <span class="highlight-commodities">commodity demand</span>.</p>
+      
+      <p><b>Economic Buffer:</b> The sustained <span class="highlight-trends">trade surplus</span> provides <span class="highlight-aus">Australia</span> with economic resilience, 
+      supporting currency stability and enabling foreign investment.</p>
+    </div>
+  </div>
+<!-- ================= FOOTER ================= -->
+<div class="creditsFrame">
+  <p><b>Author:</b> Shlok Trivedi · FIT3179 · Student ID: 33639191<br>
+    Data courtesy of 
+    <a href="https://www.abs.gov.au" target="_blank">Australian Bureau of Statistics</a> and
+    <a href="https://www.dfat.gov.au" target="_blank">DFAT</a>
+  </p>
+</div>
+
+  </div>
+</div>
+</body>
+</html>
